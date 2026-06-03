@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
+	"github.com/moysemei/kanji-analyzer/internal/exporter"
 	"github.com/moysemei/kanji-analyzer/internal/nlp"
 	"github.com/moysemei/kanji-analyzer/internal/subtitle"
 )
@@ -33,6 +34,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Fatal error loading dictionary: %v", err)
 	}
+
+	outputFile := "../../deck_test_anime.csv"
+	fmt.Printf("Generating Anki deck at: %s...\n", outputFile)
+
+	err = exporter.ToCSV(vocabulary, jlptDict, outputFile)
+	if err != nil {
+		log.Fatalf("Fatal error generating CSV: %v", err)
+	}
+
+	fmt.Println("Success! Your Anki deck is ready.")
 
 	fmt.Println("--- JLPT VOCABULARY ANALYSIS ---")
 
