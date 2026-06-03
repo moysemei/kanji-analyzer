@@ -7,6 +7,7 @@ import (
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
 	"github.com/moysemei/kanji-analyzer/internal/exporter"
 	"github.com/moysemei/kanji-analyzer/internal/nlp"
+	"github.com/moysemei/kanji-analyzer/internal/stats"
 	"github.com/moysemei/kanji-analyzer/internal/subtitle"
 )
 
@@ -34,6 +35,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Fatal error loading dictionary: %v", err)
 	}
+
+	report := stats.CalculateDensity(vocabulary, jlptDict)
+
+	fmt.Println("=== DENSITY REPORT ===")
+	fmt.Printf("Total Valid Words: %d\n", report.TotalWords)
+
+	for level, percentage := range report.Density {
+		fmt.Printf("- %-7s: %5.2f%%\n", level, percentage)
+	}
+	fmt.Println("======================\n")
 
 	outputFile := "../../deck_test_anime.csv"
 	fmt.Printf("Generating Anki deck at: %s...\n", outputFile)
