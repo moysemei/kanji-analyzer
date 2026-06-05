@@ -1,4 +1,4 @@
-import { AnalysisResult } from '../types';
+import type { AnalysisResult } from '../types';
 
 export const analyzeSubtitle = async (file: File): Promise<AnalysisResult> => {
 	const formData = new FormData();

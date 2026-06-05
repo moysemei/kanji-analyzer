@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { AnalysisResult } from './types';
+import type { AnalysisResult } from './types';
 import { analyzeSubtitle } from './services/api';
 import { UploadArea } from './components/UploadArea';
 import { ResultPanel } from './components/ResultPanel';
