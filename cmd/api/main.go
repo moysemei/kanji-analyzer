@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -18,10 +19,12 @@ type APIResponse struct {
 }
 
 func main() {
-	port := ":8080"
-	dictPath := "../../internal/dictionary/data/jlpt.json"
+	port := flag.String("port", "8080", "HTTP server port")
+	dictPath := flag.String("dict", "internal/dictionary/data/jlpt.json", "path to the JLPT dictionary JSON")
 
-	jlptDict, err := dictionary.Load(dictPath)
+	flag.Parse()
+
+	jlptDict, err := dictionary.Load(*dictPath)
 	if err != nil {
 		log.Fatalf("Fatal error loading dictionary: %v", err)
 	}
@@ -85,9 +88,11 @@ func main() {
 		json.NewEncoder(w).Encode(response)
 	})
 
-	fmt.Printf("Starting HTTP server on http://localhost%s\n", port)
+	addr := ":" + *port
 
-	err = http.ListenAndServe(port, nil)
+	fmt.Printf("Starting HTTP server on http://localhost%s\n", addr)
+
+	err = http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

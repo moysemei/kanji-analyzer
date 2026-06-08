@@ -46,7 +46,8 @@ func main() {
 	for level, percentage := range result.Stats.Density {
 		fmt.Printf("- %-7s: %5.2f%%\n", level, percentage)
 	}
-	fmt.Println("======================\n")
+	fmt.Println("======================")
+	fmt.Println()
 
 	fmt.Printf("Generating Anki deck at: %s...\n", *outputPath)
 
