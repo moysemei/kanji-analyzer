@@ -7,10 +7,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/moysemei/kanji-analyzer/internal/analyzer"
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
-	"github.com/moysemei/kanji-analyzer/internal/nlp"
 	"github.com/moysemei/kanji-analyzer/internal/stats"
-	"github.com/moysemei/kanji-analyzer/internal/subtitle"
 )
 
 type APIResponse struct {
@@ -36,18 +35,25 @@ func main() {
 
 	http.HandleFunc("/api/analyze", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Content-Type", "application/json")
 
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
+
 		if r.Method != http.MethodPost {
 			http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
 			return
 		}
 
-		r.ParseMultipartForm(10 << 20)
+		err := r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			http.Error(w, `{"error": "Failed to parse multipart form"}`, http.StatusBadRequest)
+			return
+		}
 
 		file, _, err := r.FormFile("subtitle")
 		if err != nil {
@@ -64,20 +70,15 @@ func main() {
 
 		rawContent := string(bytes)
 
-		cleanedDialogue := subtitle.CleanSRT(rawContent)
-		pureJapanese := subtitle.RemoveNonJapanese(cleanedDialogue)
-
-		vocab, err := nlp.ExtractVocabulary(pureJapanese)
+		result, err := analyzer.Analyze(rawContent, jlptDict)
 		if err != nil {
-			http.Error(w, `{"error": "Failed to process NLP engine"}`, http.StatusInternalServerError)
+			http.Error(w, `{"error": "Failed to process subtitle"}`, http.StatusInternalServerError)
 			return
 		}
 
-		report := stats.CalculateDensity(vocab, jlptDict)
-
 		response := APIResponse{
-			Stats:      report,
-			Vocabulary: vocab,
+			Stats:      result.Stats,
+			Vocabulary: result.Vocabulary,
 		}
 
 		w.WriteHeader(http.StatusOK)
@@ -85,6 +86,7 @@ func main() {
 	})
 
 	fmt.Printf("Starting HTTP server on http://localhost%s\n", port)
+
 	err = http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
