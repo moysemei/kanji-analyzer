@@ -1,8 +1,8 @@
 export interface AnalysisResult {
 	stats: {
-		TotalWords: number;
-		LevelCount: Record<string, number>;
-		Density: Record<string, number>;
+		totalWords: number;
+		levelCount: Record<string, number>;
+		density: Record<string, number>;
 	};
 	vocabulary: string[];
 }

@@ -2,9 +2,9 @@
 package stats
 
 type Report struct {
-	TotalWords int
-	LevelCount map[string]int
-	Density    map[string]float64
+	TotalWords int                `json:"totalWords"`
+	LevelCount map[string]int     `json:"levelCount"`
+	Density    map[string]float64 `json:"density"`
 }
 
 func CalculateDensity(vocabulary []string, dict map[string]string) Report {

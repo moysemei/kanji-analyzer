@@ -6,7 +6,7 @@ interface ResultPanelProps {
 }
 
 export function ResultPanel({ result, onDownload }: ResultPanelProps) {
-  const jlptLevels = Object.keys(result.stats.Density).sort().reverse();
+  const jlptLevels = Object.keys(result.stats.density).sort().reverse();
 
   return (
     <div style={{ marginTop: '2rem', textAlign: 'left' }}>
@@ -25,7 +25,7 @@ export function ResultPanel({ result, onDownload }: ResultPanelProps) {
         <div style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px', flex: 1, border: '1px solid #e9ecef' }}>
           <span style={{ fontSize: '0.9rem', color: '#6c757d' }}>Total Unique Words</span>
           <h3 style={{ margin: '0.5rem 0 0 0', fontSize: '2rem', color: '#2b2b2b' }}>
-            {result.stats.TotalWords}
+            {result.stats.totalWords}
           </h3>
         </div>
       </div>
@@ -37,14 +37,14 @@ export function ResultPanel({ result, onDownload }: ResultPanelProps) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <strong style={{ fontSize: '1.2rem', color: '#007bff' }}>{level}</strong>
               <span style={{ fontSize: '0.85rem', color: '#6c757d', fontWeight: 'bold' }}>
-                {result.stats.LevelCount[level]} words
+                {result.stats.levelCount[level]} words
               </span>
             </div>
             <div style={{ background: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ background: '#007bff', height: '100%', width: `${result.stats.Density[level]}%` }} />
+              <div style={{ background: '#007bff', height: '100%', width: `${result.stats.density[level]}%` }} />
             </div>
             <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.85rem', textAlign: 'right', color: '#495057' }}>
-              {result.stats.Density[level].toFixed(1)}% of text
+              {result.stats.density[level].toFixed(1)}% of text
             </p>
           </div>
         ))}
