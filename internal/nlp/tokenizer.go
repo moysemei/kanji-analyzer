@@ -18,6 +18,8 @@ func ExtractVocabulary(text string) ([]string, error) {
 
 	var vocabulary []string
 
+	seen := make(map[string]bool)
+
 	for _, token := range tokens {
 		pos := token.POS()
 		if len(pos) == 0 {
@@ -31,12 +33,14 @@ func ExtractVocabulary(text string) ([]string, error) {
 		}
 
 		baseWord, ok := token.BaseForm()
-
 		if !ok || baseWord == "" {
 			baseWord = token.Surface
 		}
 
-		vocabulary = append(vocabulary, baseWord)
+		if baseWord != "" && !seen[baseWord] {
+			seen[baseWord] = true
+			vocabulary = append(vocabulary, baseWord)
+		}
 	}
 
 	return vocabulary, nil
