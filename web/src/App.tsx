@@ -27,7 +27,10 @@ function App() {
   const downloadCSV = () => {
     if (!result) return;
 
-    const csvContent = result.vocabulary.join('\n');
+    const csvContent = [
+  'word,level',
+  ...result.vocabulary.map((item) => `${item.word},${item.level}`)
+].join('\n');
     const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { 
       type: 'text/csv;charset=utf-8;' 
     });
