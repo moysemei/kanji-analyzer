@@ -12,6 +12,19 @@ import (
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+func writeJSONError(w http.ResponseWriter, status int, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+
+	json.NewEncoder(w).Encode(ErrorResponse{
+		Error: message,
+	})
+}
+
 func main() {
 	port := flag.String("port", "8080", "HTTP server port")
 	dictPath := flag.String("dict", "internal/dictionary/data/jlpt.json", "path to the JLPT dictionary JSON")
@@ -42,26 +55,26 @@ func main() {
 		}
 
 		if r.Method != http.MethodPost {
-			http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
+			writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 
 		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {
-			http.Error(w, `{"error": "Failed to parse multipart form"}`, http.StatusBadRequest)
+			writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 
 		file, _, err := r.FormFile("subtitle")
 		if err != nil {
-			http.Error(w, `{"error": "Failed to receive subtitle file"}`, http.StatusBadRequest)
+			writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 		defer file.Close()
 
 		bytes, err := io.ReadAll(file)
 		if err != nil {
-			http.Error(w, `{"error": "Failed to read file bytes"}`, http.StatusInternalServerError)
+			writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 
@@ -69,7 +82,7 @@ func main() {
 
 		result, err := analyzer.Analyze(rawContent, jlptDict)
 		if err != nil {
-			http.Error(w, `{"error": "Failed to process subtitle"}`, http.StatusInternalServerError)
+			writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 
