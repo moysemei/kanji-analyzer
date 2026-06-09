@@ -9,6 +9,17 @@ import (
 	"github.com/ikawaha/kagome/v2/tokenizer"
 )
 
+var ignoredWords = map[string]bool{
+	"ん": true,
+	"の": true,
+	"こ": true,
+	"っ": true,
+	"ー": true,
+	"！": true,
+	"？": true,
+	"〜": true,
+}
+
 func ExtractVocabulary(text string) ([]string, error) {
 	t, err := tokenizer.New(ipa.Dict(), tokenizer.OmitBosEos())
 	if err != nil {
@@ -48,6 +59,10 @@ func ExtractVocabulary(text string) ([]string, error) {
 
 func isValidVocabulary(word string, mainPOS string) bool {
 	if word == "" {
+		return false
+	}
+
+	if ignoredWords[word] {
 		return false
 	}
 
