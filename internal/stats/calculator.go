@@ -1,13 +1,15 @@
 // Package stats handle mathematical calculations for vocabulary density.
 package stats
 
+import "github.com/moysemei/kanji-analyzer/internal/dictionary"
+
 type Report struct {
 	TotalWords int                `json:"totalWords"`
 	LevelCount map[string]int     `json:"levelCount"`
 	Density    map[string]float64 `json:"density"`
 }
 
-func CalculateDensity(vocabulary []string, dict map[string]string) Report {
+func CalculateDensity(vocabulary []string, dict map[string]dictionary.Entry) Report {
 	report := Report{
 		TotalWords: len(vocabulary),
 		LevelCount: make(map[string]int),
@@ -19,9 +21,10 @@ func CalculateDensity(vocabulary []string, dict map[string]string) Report {
 	}
 
 	for _, word := range vocabulary {
-		level, exists := dict[word]
-		if !exists {
-			level = "Unknown"
+		entry, exists := dict[word]
+		level := "Unknown"
+		if exists {
+			level = entry.Level
 		}
 
 		report.LevelCount[level]++

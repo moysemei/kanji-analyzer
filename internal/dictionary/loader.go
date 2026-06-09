@@ -7,13 +7,19 @@ import (
 	"os"
 )
 
-func Load(filepath string) (map[string]string, error) {
+type Entry struct {
+	Word    string `json:"word"`
+	Reading string `json:"reading"`
+	Level   string `json:"level"`
+}
+
+func Load(filepath string) (map[string]Entry, error) {
 	bytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read dictionary file: %w", err)
 	}
 
-	var dict map[string]string
+	var dict map[string]Entry
 
 	err = json.Unmarshal(bytes, &dict)
 	if err != nil {

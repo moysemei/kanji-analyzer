@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"github.com/moysemei/kanji-analyzer/internal/dictionary"
 	"github.com/moysemei/kanji-analyzer/internal/nlp"
 	"github.com/moysemei/kanji-analyzer/internal/stats"
 	"github.com/moysemei/kanji-analyzer/internal/subtitle"
@@ -12,11 +13,12 @@ type Result struct {
 }
 
 type VocabularyItem struct {
-	Word  string `json:"word"`
-	Level string `json:"level"`
+	Word    string `json:"word"`
+	Reading string `json:"reading"`
+	Level   string `json:"level"`
 }
 
-func Analyze(rawContent string, dict map[string]string) (Result, error) {
+func Analyze(rawContent string, dict map[string]dictionary.Entry) (Result, error) {
 	cleanedDialogue := subtitle.CleanSRT(rawContent)
 	pureJapanese := subtitle.RemoveNonJapanese(cleanedDialogue)
 
@@ -34,18 +36,23 @@ func Analyze(rawContent string, dict map[string]string) (Result, error) {
 	}, nil
 }
 
-func buildVocabularyItems(words []string, dict map[string]string) []VocabularyItem {
+func buildVocabularyItems(words []string, dict map[string]dictionary.Entry) []VocabularyItem {
 	vocabulary := make([]VocabularyItem, 0, len(words))
 
 	for _, word := range words {
-		level, exists := dict[word]
+		entry, exists := dict[word]
 		if !exists {
-			level = "Unknown"
+			vocabulary = append(vocabulary, VocabularyItem{
+				Word:  word,
+				Level: "Unknown",
+			})
+			continue
 		}
 
 		vocabulary = append(vocabulary, VocabularyItem{
-			Word:  word,
-			Level: level,
+			Word:    entry.Word,
+			Reading: entry.Reading,
+			Level:   entry.Level,
 		})
 	}
 

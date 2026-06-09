@@ -58,14 +58,7 @@ export function ResultPanel({ result, onDownload }: ResultPanelProps) {
 
       <h3 style={{ color: '#495057', marginBottom: '1rem' }}>Density by Level (JLPT)</h3>
 
-	  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#495057' }}>
-  <input
-    type="checkbox"
-    checked={showUnknown}
-    onChange={(event) => setShowUnknown(event.target.checked)}
-  />
-  Show unknown words
-</label>      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+	  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         {jlptLevels.map((level) => (
           <div key={level} style={{ background: '#ffffff', padding: '1rem', borderRadius: '8px', border: '1px solid #dee2e6', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
@@ -115,11 +108,23 @@ export function ResultPanel({ result, onDownload }: ResultPanelProps) {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {items.map((item, index) => (
                   <span
-                    key={`${item.word}-${index}`}
-                    style={{ background: '#ffffff', padding: '0.25rem 0.75rem', borderRadius: '16px', border: '1px solid #ced4da', fontSize: '0.95rem', color: '#343a40' }}
-                  >
-                    {item.word}
-                  </span>
+  key={`${item.word}-${index}`}
+  style={{
+    background: '#ffffff',
+    padding: '0.25rem 0.75rem',
+    borderRadius: '16px',
+    border: '1px solid #ced4da',
+    fontSize: '0.95rem',
+    color: '#343a40'
+  }}
+>
+  {item.word}
+  {item.reading && item.reading !== item.word && (
+    <small style={{ color: '#6c757d', marginLeft: '0.25rem' }}>
+      （{item.reading}）
+    </small>
+  )}
+</span>
                 ))}
               </div>
             </section>

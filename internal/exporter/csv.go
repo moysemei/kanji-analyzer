@@ -5,9 +5,11 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+
+	"github.com/moysemei/kanji-analyzer/internal/dictionary"
 )
 
-func ToCSV(vocabulary []string, dict map[string]string, outputPath string) error {
+func ToCSV(vocabulary []string, dict map[string]dictionary.Entry, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("failed to create csv file: %w", err)
@@ -22,12 +24,18 @@ func ToCSV(vocabulary []string, dict map[string]string, outputPath string) error
 	defer writer.Flush()
 
 	for _, word := range vocabulary {
-		level, exists := dict[word]
-		if !exists {
-			level = "Unknown"
+		entry, exists := dict[word]
+
+		level := "Unknown"
+		reading := ""
+
+		if exists {
+			level = entry.Level
+			reading = entry.Reading
+			word = entry.Word
 		}
 
-		row := []string{word, level}
+		row := []string{word, reading, level}
 
 		err := writer.Write(row)
 		if err != nil {

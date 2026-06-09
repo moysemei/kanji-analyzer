@@ -1,6 +1,10 @@
 package analyzer
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/moysemei/kanji-analyzer/internal/dictionary"
+)
 
 func TestAnalyzeReturnsVocabularyAndStats(t *testing.T) {
 	rawContent := `1
@@ -8,12 +12,12 @@ func TestAnalyzeReturnsVocabularyAndStats(t *testing.T) {
 俺は海賊王になる男だ
 `
 
-	dict := map[string]string{
-		"俺":  "N5",
-		"海賊": "N3",
-		"王":  "N5",
-		"なる": "N5",
-		"男":  "N3",
+	dict := map[string]dictionary.Entry{
+		"俺":  {Word: "俺", Reading: "おれ", Level: "N1"},
+		"海賊": {Word: "海賊", Reading: "かいぞく", Level: "N3"},
+		"王":  {Word: "王", Reading: "おう", Level: "N3"},
+		"なる": {Word: "なる", Reading: "なる", Level: "N5"},
+		"男":  {Word: "男", Reading: "おとこ", Level: "N5"},
 	}
 
 	result, err := Analyze(rawContent, dict)

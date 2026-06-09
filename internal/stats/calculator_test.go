@@ -1,15 +1,19 @@
 package stats
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/moysemei/kanji-analyzer/internal/dictionary"
+)
 
 func TestCalculateDensity(t *testing.T) {
 	vocabulary := []string{"学校", "悪魔", "王", "男", "ナレーション"}
 
-	dict := map[string]string{
-		"学校": "N5",
-		"悪魔": "N3",
-		"王":  "N3",
-		"男":  "N5",
+	dict := map[string]dictionary.Entry{
+		"学校": {Word: "学校", Reading: "がっこう", Level: "N5"},
+		"悪魔": {Word: "悪魔", Reading: "あくま", Level: "N3"},
+		"王":  {Word: "王", Reading: "おう", Level: "N3"},
+		"男":  {Word: "男", Reading: "おとこ", Level: "N5"},
 	}
 
 	report := CalculateDensity(vocabulary, dict)

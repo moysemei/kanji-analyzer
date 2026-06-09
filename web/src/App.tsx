@@ -33,8 +33,10 @@ function App() {
 };
 
 const csvContent = [
-  'word,level',
-  ...result.vocabulary.map((item) => `${escapeCSV(item.word)},${escapeCSV(item.level)}`)
+  'word,reading,level',
+  ...result.vocabulary.map((item) =>
+    `${escapeCSV(item.word)},${escapeCSV(item.reading ?? '')},${escapeCSV(item.level)}`
+  )
 ].join('\n');
     const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { 
       type: 'text/csv;charset=utf-8;' 

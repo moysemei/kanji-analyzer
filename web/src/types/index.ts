@@ -1,5 +1,6 @@
 export interface VocabularyItem {
   word: string;
+  reading?: string;
   level: string;
 }
 

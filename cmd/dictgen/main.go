@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/moysemei/kanji-analyzer/internal/dictionary"
 )
 
 type Meta struct {
@@ -22,7 +24,7 @@ func main() {
 
 	flag.Parse()
 
-	dict := make(map[string]string)
+	dict := make(map[string]dictionary.Entry)
 
 	files, err := filepath.Glob(filepath.Join(*sourceDir, "term_meta_bank_*.json"))
 	if err != nil {
@@ -51,7 +53,7 @@ func main() {
 	fmt.Printf("Generated dictionary with %d entries at %s\n", len(dict), *outputPath)
 }
 
-func processFile(path string, dict map[string]string) error {
+func processFile(path string, dict map[string]dictionary.Entry) error {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -82,31 +84,35 @@ func processFile(path string, dict map[string]string) error {
 			continue
 		}
 
-		addWord(dict, word, level)
+		addWord(dict, word, word, meta.Reading, level)
 
-		// Also add the reading as a key.
-		// This helps when subtitles use kana instead of kanji.
 		if meta.Reading != "" {
-			addWord(dict, meta.Reading, level)
+			addWord(dict, meta.Reading, word, meta.Reading, level)
 		}
 	}
 
 	return nil
 }
 
-func addWord(dict map[string]string, word string, level string) {
-	if word == "" {
+func addWord(dict map[string]dictionary.Entry, key string, word string, reading string, level string) {
+	if key == "" {
 		return
 	}
 
-	currentLevel, exists := dict[word]
+	newEntry := dictionary.Entry{
+		Word:    word,
+		Reading: reading,
+		Level:   level,
+	}
+
+	currentEntry, exists := dict[key]
 	if !exists {
-		dict[word] = level
+		dict[key] = newEntry
 		return
 	}
 
-	if isEasierLevel(level, currentLevel) {
-		dict[word] = level
+	if isEasierLevel(newEntry.Level, currentEntry.Level) {
+		dict[key] = newEntry
 	}
 }
 
