@@ -51,7 +51,9 @@ func main() {
 
 	fmt.Printf("Generating Anki deck at: %s...\n", *outputPath)
 
-	err = exporter.ToCSV(result.Vocabulary, jlptDict, *outputPath)
+	words := extractWords(result.Vocabulary)
+
+	err = exporter.ToCSV(words, jlptDict, *outputPath)
 	if err != nil {
 		log.Fatalf("Fatal error generating CSV: %v", err)
 	}
@@ -60,15 +62,19 @@ func main() {
 
 	fmt.Println("--- JLPT VOCABULARY ANALYSIS ---")
 
-	for _, word := range result.Vocabulary {
-		level, exists := jlptDict[word]
-
-		if exists {
-			fmt.Printf("Word: %-10s | Level: %s\n", word, level)
-		} else {
-			fmt.Printf("Word: %-10s | Level: Unknown\n", word)
-		}
+	for _, item := range result.Vocabulary {
+		fmt.Printf("Word: %-10s | Level: %s\n", item.Word, item.Level)
 	}
 
 	fmt.Println("---------------------------------")
+}
+
+func extractWords(vocabulary []analyzer.VocabularyItem) []string {
+	words := make([]string, 0, len(vocabulary))
+
+	for _, item := range vocabulary {
+		words = append(words, item.Word)
+	}
+
+	return words
 }

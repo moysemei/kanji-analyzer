@@ -10,13 +10,7 @@ import (
 
 	"github.com/moysemei/kanji-analyzer/internal/analyzer"
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
-	"github.com/moysemei/kanji-analyzer/internal/stats"
 )
-
-type APIResponse struct {
-	Stats      stats.Report `json:"stats"`
-	Vocabulary []string     `json:"vocabulary"`
-}
 
 func main() {
 	port := flag.String("port", "8080", "HTTP server port")
@@ -79,13 +73,8 @@ func main() {
 			return
 		}
 
-		response := APIResponse{
-			Stats:      result.Stats,
-			Vocabulary: result.Vocabulary,
-		}
-
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(response)
+		json.NewEncoder(w).Encode(result)
 	})
 
 	addr := ":" + *port
