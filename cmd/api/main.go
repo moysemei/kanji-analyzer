@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/moysemei/kanji-analyzer/internal/analyzer"
 	"github.com/moysemei/kanji-analyzer/internal/dictionary"
@@ -30,6 +31,10 @@ func main() {
 	dictPath := flag.String("dict", "internal/dictionary/data/jlpt.json", "path to the JLPT dictionary JSON")
 
 	flag.Parse()
+
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		*port = envPort
+	}
 
 	jlptDict, err := dictionary.Load(*dictPath)
 	if err != nil {
