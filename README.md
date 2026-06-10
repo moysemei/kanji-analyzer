@@ -69,8 +69,9 @@ internal/
 
 web/
   src/         React frontend
+```
 
-  Getting Started
+## Getting Started
 Requirements
 Go
 Node.js
@@ -140,16 +141,19 @@ JLPT vocabulary data is based on Yomitan/Yomichan-compatible metadata derived fr
 
 JLPT vocabulary lists are unofficial estimates and may not represent official JLPT exam content.
 
-Current Limitations
-JLPT classification depends on the dictionary source
-Unknown words may include names, slang, sound effects, anime-specific terms, or words outside JLPT lists
-Tokenization and dictionary matching may not always select the ideal canonical form
-The app currently analyzes vocabulary only, not grammar or sentence difficulty
-Roadmap
-Improve filtering for noise and sound effects
-Add meanings to vocabulary entries
-Improve Anki export templates
-Add drag-and-drop upload
-Add sample subtitle files
-Add Docker support
-Add deployment instructions
+## Current Limitations
+
+- JLPT classification depends on the dictionary source
+- Unknown words may include names, slang, sound effects, anime-specific terms, or words outside JLPT lists
+- Tokenization and dictionary matching may not always select the ideal canonical form
+- The app currently analyzes vocabulary only, not grammar or sentence difficulty
+
+## Roadmap
+
+- Improve filtering for noise and sound effects
+- Add meanings to vocabulary entries
+- Improve Anki export templates
+- Add drag-and-drop upload
+- Add sample subtitle files
+- Add Docker support
+- Add deployment instructions
