@@ -178,3 +178,8 @@ JLPT vocabulary lists are unofficial estimates and may not represent official JL
 - Add sample subtitle files
 - Add Docker support
 - Add deployment instructions
+
+## Live Demo
+
+- Frontend: https://kanji-analyzer.vercel.app
+- API Health Check: https://kanji-analyzer-api.onrender.com/health
