@@ -72,36 +72,54 @@ web/
 ```
 
 ## Getting Started
-Requirements
-Go
-Node.js
-npm
-Run the API
+
+### Requirements
+
+- Go
+- Node.js
+- npm
+
+### Run the API
 
 From the project root:
 
+```bash
 go run ./cmd/api
+```
 
 The API starts at:
 
+```txt
 http://localhost:8080
-Run the frontend
+```
+
+### Run the frontend
+
+```bash
 cd web
 npm install
 npm run dev
+```
 
 Then open the local Vite URL shown in the terminal.
 
-Run the CLI
+### Run the CLI
+
+```bash
 go run ./cmd/cli -input samples/sample.srt -output anki_deck.csv
-API Usage
+```
 
-You can analyze a subtitle file with curl:
+## API Usage
 
+You can analyze a subtitle file with `curl`:
+
+```bash
 curl -X POST -F "subtitle=@samples/sample.srt" http://localhost:8080/api/analyze
+```
 
 Example response:
 
+```json
 {
   "stats": {
     "totalWords": 120,
@@ -124,23 +142,26 @@ Example response:
     }
   ]
 }
-CSV Export
+```
+
+## CSV Export
 
 The exported CSV contains:
 
+```csv
 word,reading,level
 食べる,たべる,N5
 学校,がっこう,N5
 悪魔,あくま,N3
+```
 
 This file can be imported into Anki or used as a vocabulary review list.
 
-Data Source
+## Data Source
 
 JLPT vocabulary data is based on Yomitan/Yomichan-compatible metadata derived from community JLPT vocabulary lists.
 
 JLPT vocabulary lists are unofficial estimates and may not represent official JLPT exam content.
-
 ## Current Limitations
 
 - JLPT classification depends on the dictionary source
